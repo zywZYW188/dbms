@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dbms.dao.PatientsinfoMapper">
+    <cache type="com.example.dbms.config.RedisCache" eviction="LRU"/>
+    <resultMap type="com.example.dbms.domain.vo.PatientsInfo" id="PatientsInfo">
+        <id column="id" property="id" jdbcType="NUMERIC"/>
+        <id column="name" property="name"  jdbcType="VARCHAR"/>
+        <id column="sex" property="sex"  jdbcType="VARCHAR"/>
+        <id column="age" property="age"  jdbcType="NUMERIC"/>
+        <id column="admissionnumber" property="admissionnumber"  jdbcType="VARCHAR"/>
+        <id column="hos_time" property="hos_time"  jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="queryPatientsInfo" resultMap="PatientsInfo" statementType="CALLABLE">
+	  call QueryPatientsInfo(#{type_tag}, #{admissionnumber}, #{name}, #{sex}, #{ecg_result}, #{imaging_result}, #{cdg_result}, #{hospital}, #{cdg_Index1}, #{cdg_Index2})
+    </select>
+
+</mapper>

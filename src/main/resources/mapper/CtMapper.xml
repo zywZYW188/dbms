@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dbms.dao.CtMapper">
+    <cache type="com.example.dbms.config.RedisCache" eviction="LRU"/>
+    <resultMap type="com.example.dbms.domain.po.Ct_report" id="Ct_report">
+        <id column="id" property="id" jdbcType="NUMERIC"/>
+        <id column="patient_id" property="patient_id" jdbcType="NUMERIC"/>
+        <id column="description" property="description" jdbcType="VARCHAR"/>
+        <id column="result_id" property="result_id"  jdbcType="NUMERIC"/>
+        <id column="date" property="date"  jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insertCt">
+    insert into ct_report (patient_id, description, result_id, date) values (#{patient_id}, #{description}, #{result_id}, #{date})
+    </insert>
+
+    <select id="findById" resultMap="Ct_report">
+        select * from ct_report where patient_id = #{patient_id}
+    </select>
+
+    <update id="updateCT">
+    update ct_report set description = #{ct_report.description}, result_id = #{ct_report.result_id}, date = #{ct_report.date}
+            where patient_id = #{patient_id}
+    </update>
+</mapper>

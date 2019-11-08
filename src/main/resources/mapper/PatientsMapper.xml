@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dbms.dao.PatientsMapper">
+    <cache type="com.example.dbms.config.RedisCache" eviction="LRU"/>
+    <resultMap type="com.example.dbms.domain.po.Patients" id="Patients">
+        <id column="id" property="id" jdbcType="NUMERIC"/>
+        <id column="name" property="name" jdbcType="VARCHAR"/>
+        <id column="sex" property="sex"  jdbcType="VARCHAR"/>
+        <id column="age" property="age"  jdbcType="NUMERIC"/>
+        <id column="admissionnumber" property="admissionnumber"  jdbcType="VARCHAR"/>
+        <id column="nationality" property="nationality"  jdbcType="NUMERIC"/>
+        <id column="type_tag" property="type_tag"  jdbcType="NUMERIC"/>
+        <id column="bir_place" property="bir_place"  jdbcType="VARCHAR"/>
+        <id column="hos_time" property="hos_time"  jdbcType="VARCHAR"/>
+        <id column="discharged_time" property="discharged_time"  jdbcType="VARCHAR"/>
+        <id column="ownner" property="ownner"  jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="findId" resultType="int">
+	select id from patients where admissionnumber = #{admissionnumber}
+    </select>
+    <select id="findPatients" resultMap="Patients">
+     select * from patients where admissionnumber = #{admissionnumber}
+    </select>
+    <select id="findPatient_id" resultType="int">
+       select id from patients where admissionnumber = #{admissionnumber}
+    </select>
+    <insert id="insertPatients">
+    insert into patients (name, sex, age, admissionnumber,nationality,type_tag,bir_place,hos_time,discharged_time,ownner) values
+     (#{name}, #{sex}, #{age}, #{admissionnumber}, #{nationality}, #{type_tag}, #{bir_place}, #{hos_time}, #{discharged_time}, #{ownner})
+    </insert>
+
+    <update id="updatePatients" parameterType="com.example.dbms.domain.po.Patients">
+    update patients set name = #{patients.name}, sex = #{patients.sex}, age = #{patients.age}, nationality = #{patients.nationality},
+    type_tag = #{patients.type_tag},bir_place = #{patients.bir_place}, hos_time = #{patients.hos_time},
+    discharged_time = #{patients.discharged_time}, ownner = #{patients.ownner} where id = #{id}
+    </update>
+
+</mapper>

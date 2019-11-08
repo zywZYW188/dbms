@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="edge" />
+    <title>心肌缺血辅助诊断平台-登录</title>
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/favicon.ico}" />
+    <link rel="stylesheet" th:href="@{css/login.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{css/iCheck/minimal/green.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{css/app.css}" type="text/css">
+    <!-- animate -->
+    <link rel="stylesheet" th:href="@{css/animate/animate.min.css}" type="text/css">
+    <script th:src="@{js/jquery.min.js}"></script>
+    <script th:src="@{js/iCheck/icheck.js}"></script>
+    <script th:src="@{js/bootstrap-notify/bootstrap-notify.min.js}"></script>
+    <script th:src="@{js/common.js}"></script>
+</head>
+<style>
+
+</style>
+<body>
+<!-- Form-->
+<div class="form">
+    <div class="form-toggle"></div>
+    <div class="form-panel one">
+        <div class="form-header">
+            <h1>账户登录</h1>
+        </div>
+        <div class="form-content">
+            <div class="form-group">
+                <label>用户名</label>
+                <input type="text" name="username" />
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" name="password" />
+            </div>
+            <div class="form-group">
+                <button onclick="login()" id="loginButton">登录</button>
+            </div>
+        </div>
+    </div>
+    <div class="form-panel two">
+        <div class="form-header">
+            <h1>账户注册</h1>
+        </div>
+        <div class="form-content">
+            <div class="form-group">
+                <label for="regusername">用户名</label>
+                <input type="text" name="username" class="form-control" id="regusername" placeholder="请输入英文或数字组合">
+            </div>
+            <div class="form-group">
+                <label for="regpassword">密码</label>
+                <input type="password" name="password" class="form-control" id="regpassword" placeholder="请输入英文和数字组合，长度不低于6位">
+            </div>
+            <div class="form-group">
+                <label for="password_confirmation">确认密码</label>
+                <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" placeholder="请再次输入">
+            </div>
+            <div class="form-group">
+                <label for="realname">真实姓名</label>
+                <input type="text" name="realname" class="form-control" id="realname" placeholder="请输入真实姓名">
+            </div>
+            <div class="form-group">
+                <label for="hospital">所在医院</label>
+                <!--<input type="text" name="hospital" class="form-control" id="hospital" placeholder="请输入任职医院 shz or fuwai">-->
+                <select id="hospital" class="form-control" required="required">
+                    <option value="0">石河子医院</option>
+                    <option value="1">北京阜外医院</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="phonenumber">手机号</label>
+                <input type="text" name="phonenumber" class="form-control" id="phonenumber" placeholder="请输入手机号码">
+            </div>
+            <div class="form-group">
+                <label for="regemail">电子邮箱</label>
+                <input type="email" name="email" class="form-control" id="regemail" placeholder="请输入正确的电子邮箱">
+            </div>
+            <div class="form-group">
+                <label for="invitvation">邀请码</label>
+                <input type="text" name="invitvation" class="form-control" id="invitvation" placeholder="请输入正确的邀请码">
+            </div>
+            <!--<div class="form-group">
+                <button onclick="regist()">注册</button>
+                <button onclick="regCancel()">取消</button>
+            </div>-->
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="regist()">注册</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="regcancel()">取消</button>
+        </div>
+    </div>
+</div>
+</body>
+<script data-th-src="@{js/login.js}"></script>
+</html>

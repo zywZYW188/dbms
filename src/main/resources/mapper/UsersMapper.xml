@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dbms.dao.UsersMapper">
+
+    <cache type="com.example.dbms.config.RedisCache" eviction="LRU"/>
+    <resultMap type="com.example.dbms.domain.po.Users" id="Users">
+        <id column="id" property="id" jdbcType="NUMERIC"/>
+        <id column="username" property="username"  jdbcType="VARCHAR"/>
+        <id column="hospital" property="hospital"  jdbcType="VARCHAR"/>
+        <id column="password" property="password"  jdbcType="VARCHAR"/>
+        <id column="realname" property="realname"  jdbcType="VARCHAR"/>
+        <id column="mobile" property="mobile"  jdbcType="VARCHAR"/>
+        <id column="email" property="email" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="findByUsername" resultMap="Users">
+	select id, username, password,hospital, realname, mobile, email from users where username = #{username}
+    </select>
+
+    <select id="findById" resultMap="Users">
+	select id, username, password,hospital, realname, mobile, email from users where id = #{id}
+    </select>
+
+    <insert id="insert">
+    insert into users(username, password, hospital,realname, mobile, email) values (#{username}, #{password}, #{hospital},#{realname}, #{mobile}, #{email})
+    </insert>
+
+</mapper>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dbms.dao.InvitationMapper">
+    <cache type="com.example.dbms.config.RedisCache" eviction="LRU"/>
+    <resultMap type="com.example.dbms.domain.po.Invitation" id="Invitation">
+        <id column="id" property="id" jdbcType="NUMERIC"/>
+        <id column="code" property="code"  jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="findByCode" resultMap="Invitation">
+	select id, code from invitation where code = #{code}
+    </select>
+
+</mapper>

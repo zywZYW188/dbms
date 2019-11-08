@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8"/>
+    <title>首页-心肌缺血辅助诊断平台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="Source code generated using layoutit.com"/>
+    <meta name="author" content="LayoutIt!"/>
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/favicon.ico}" />
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/jquery.dataTables.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/dataTables.bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/main.css}" rel="stylesheet" />
+    <link th:href="@{/css/sidebar.css}" rel="stylesheet" />
+    <link th:href="@{/css/vis.min.css}" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="row">
+	    <div class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+					  <span class="sr-only">Toggle navigation</span>
+					  <span class="icon-bar"></span>
+					  <span class="icon-bar"></span>
+					  <span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="/loginIndex">首页</a>
+				</div>
+			    <div class="navbar-collapse collapse" role="navigation">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                <i class="glyphicon glyphicon-plus"></i>
+                                <span>病历操作</span>
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a shiro:hasPermission="permission:query" th:href="@{/casesSearch}">病历查询</a>
+                                    <!--<a href="/casesSearch">病历查询</a>-->
+                                </li>
+                                <li>
+                                    <a shiro:hasPermission="permission:add" th:href="@{/casesAddition}">添加病历</a>
+                                    <!-- <a href="casesAddition.html">添加病历</a>-->
+                                <li>
+                                <li>
+                                    <a shiro:hasPermission="permission:modify" th:href="@{/casesModification}">修改病历</a>
+                                    <!--<a href="casesModification.html">修改病历</a>-->
+                                </li>
+                                <!--<li>
+                                    <a shiro:hasPermission="permission:upload" th:href="@{/casesUpdata}">上传病历</a>
+                                    &lt;!&ndash;<a href="casesUpdata.html">上传病历</a>&ndash;&gt;
+                                </li>-->
+                                <li>
+                                    <a shiro:hasPermission="permission:CDGdiagnosis" th:href="@{/cdgDiagnosis}">有病历诊断</a>
+                                    <!--<a href="cdgDiagnosis.html">有病历诊断</a>-->
+                                </li>
+                                <li>
+                                    <a shiro:hasPermission="permission:diagnosis" th:href="@{/cdgDiagnosis}">无病历诊断</a>
+                                    <!--<a href="cdgDiagnosis.html">无病历诊断</a>-->
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li class="auth">
+                            <a class="user__name" data-th-utext="${user.username}"></a>
+						</li>
+						<li class="auth">
+							<a role="button" id="logoutbtn">注销登陆</a>
+						</li>
+					</ul>
+			    </div>
+			</div>
+	    </div>
+    </div>
+   
+   	<!--<div class="row">
+	<div class="jumbotron masthead">
+		<div class="container">
+		  <h1>&nbsp;病历搜索</h1>
+		</div>
+    </div>
+	</div>-->
+    <!--信息筛选导航栏-->
+    <div class="container-fluid" style="position: absolute; z-index:10; margin-top: 50px;">
+        <div class="row">
+            <nav class="navbar navbar-default">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle1 list-group-item active" style="background-color: #333; border-color: #333" data-toggle="collapse" data-target="#screen">
+                            信<br>息</br>筛<br>选</br>
+                            <!--<span class="sr-only">navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>-->
+                        </button>
+                    </div>
+
+                    <div class="collapse navbar-collapse1 navbar-left" id="screen">
+                        <div class="list-group">
+                            <!--<a class="list-group-item active">
+                                信息筛选
+                            </a>-->
+                            <a data-toggle="collapse" data-target="#diseaseDiv" class="collapse list-group-item">病人类型</a>
+                            <div class="row collapse on" id="diseaseDiv">
+                                <div class="col-md-8">
+                                    <label class="checkbox-inline form-control">
+                                        <input type="checkbox" id="im"/> 心肌缺血
+                                    </label>
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="checkbox-inline form-control">
+                                        <input type="checkbox" id="ar"/> 心律失常
+                                    </label>
+                                </div>
+                            </div>
+
+                            <a data-toggle="collapse" data-target="#nameDiv" class="collapse list-group-item">姓名</a>
+                            <div class="row collapse on" id="nameDiv">
+                                <div class="col-md-12">
+                                    <input type="text" placeholder="张三" id="name" class="form-control"/>
+                                </div>
+                            </div>
+
+                            <a data-toggle="collapse" data-target="#sexDiv" class="collapse list-group-item">性别</a>
+                            <div class="row collapse on" id="sexDiv">
+                                <div class="col-md-6">
+                                    <label class="checkbox-inline form-control">
+                                        <input type="checkbox" id="male"/> 男
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="checkbox-inline form-control">
+                                        <input type="checkbox" id="female"/> 女
+                                    </label>
+                                </div>
+                            </div>
+
+                            <a data-toggle="collapse" data-target="#admissionnumberDiv" class="collapse list-group-item">住院号</a>
+                            <div class="row collapse on" id="admissionnumberDiv">
+                                <div class="col-md-12">
+                                    <input type="text" placeholder="六/七位数字" id="admissionnumber" class="form-control" maxlength="7"/>
+                                </div>
+                            </div>
+
+                            <a data-toggle="collapse" data-target="#ecgDiv" class="collapse list-group-item">心电图</a>
+                            <div class="row collapse on" id="ecgDiv">
+                                <div class="col-md-8">
+                                    <label class="checkbox-inline form-control">
+                                        <input type="checkbox" id="ecgNormal"/> 大致正常
+                                    </label>
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="checkbox-inline form-control">
+                                        <input type="checkbox" id="ecgUnusual"/> 可见异常
+                                    </label>
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="checkbox-inline form-control">
+                                        <input type="checkbox" id="ecgBigUnusual"/> 明显异常
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!--<a data-toggle="collapse" data-target="#ctDiv" class="collapse list-group-item">CT结果</a>
+
+                                    <div class="row collapse on" id="ctDiv">
+                                        <div class="col-md-8">
+                                            <label class="checkbox-inline form-control">
+                                                <input type="checkbox" id="ctNothing"> 暂缺
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label class="checkbox-inline form-control">
+                                                <input type="checkbox" id="ctStricture"> 狭窄
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label class="checkbox-inline form-control">
+                                                <input type="checkbox" id="ctNormal"> 未见异常
+                                            </label>
+                                        </div>
+                                    </div>-->
+
+                            <a data-toggle="collapse" data-target="#radiographyDiv" class="collapse list-group-item">造影结果</a>
+                            <div class="row collapse on" id="radiographyDiv">
+                                <div class="col-md-8">
+                                    <label class="checkbox-inline form-control">
+                                        <input type="checkbox" id="radiographyNothing"/> 暂缺
+                                    </label>
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="checkbox-inline form-control">
+                                        <input type="checkbox" id="radiographyStricture"/> 狭窄
+                                    </label>
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="checkbox-inline form-control">
+                                        <input type="checkbox" id="radiographyNormal"/> 未见异常
+                                    </label>
+                                </div>
+                            </div>
+
+                            <a data-toggle="collapse" data-target="#cdgDiv" class="collapse list-group-item">CDG结果</a>
+                            <div class="row collapse on" id="cdgDiv">
+                                <div class="col-md-8">
+                                    <label class="checkbox-inline form-control">
+                                        <input type="checkbox" id="negative"/> 阴性
+                                    </label>
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="checkbox-inline form-control">
+                                        <input type="checkbox" id="positive"/> 阳性
+                                    </label>
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="checkbox-inline form-control">
+                                        <input type="checkbox" id="probablePositive"/> 可疑阳性
+                                    </label>
+                                </div>
+                            </div>
+
+                            <a data-toggle="collapse" data-target="#cdgIn" class="collapse list-group-item">CDG指标</a>
+                            <div class="row collapse on" id="cdgIn">
+                                <div class="col-md-3">
+                                    <input type="number" id="less"  placeholder="0.0" class="form-control"/>
+                                </div>
+                                <div class="col-md-1">——</div>
+                                <div class="col-md-3">
+                                    <input type="number" id="more"  placeholder="0.0"class="form-control"/>
+                                </div>
+                            </div>
+
+                            <!--<a data-toggle="collapse" data-target="#sourceDiv" class="collapse list-group-item">数据来源</a>
+                                    <div class="row collapse on" id="sourceDiv">
+                                        <div class="col-md-8">
+                                            <label class="checkbox-inline form-control">
+                                                <input type="checkbox" id="mindray"> 迈瑞
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label class="checkbox-inline form-control">
+                                                <input type="checkbox" id="aika"> 爱康
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label class="checkbox-inline form-control">
+                                                <input type="checkbox" id="cardis"> 卡迪斯
+                                            </label>
+                                        </div>
+                                    </div>
+
+                            <a data-toggle="collapse" data-target="#timesDiv" class="collapse list-group-item">测量次数</a>
+                                    <div class="row collapse on" id="timesDiv">
+                                        <div class="col-md-8">
+                                            <label class="checkbox-inline form-control">
+                                                <input type="checkbox" id="times"> 多次测量
+                                            </label>
+                                        </div>
+                                    </div>-->
+
+                            <div class="row searchButton ">
+                                <div class="col-md-6">
+                                    <button id="search" type="button" class="btn btn-primary btn-block" style="background-color: #333; border-color: #333">
+                                        搜索
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button id="reset" type="button" class="btn btn-default btn-block">重置</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!--<div class="dataDistribution">
+                            <button id="distribution" type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#patientAnalyse">数据分析</button>
+                        </div>-->
+                    </div>
+
+                </nav>
+        </div>
+    </div>
+
+    <div class="section" style="margin-top: 100px;">
+        <div class="row">
+            <div class="col-md-2">
+
+            </div>
+
+            <div class="col-md-12" style="position:relative;">
+
+
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="patientsData_wrapper" class="dataTables_wrapper no-footer">
+                                <table id="patientsData" class="table display" cellspaceing="0" width="100%" role="grid">
+                                    <thead>
+                                        <tr>
+                                            <!--<th></th>-->
+                                            <th>姓名</th>
+                                            <th>性别</th>
+                                            <th>年龄</th>
+                                            <th>住院号</th>
+                                            <th>入院时间</th>
+                                            <!--<th>数据源</th>-->
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="patientsDataSublist" class="dataTables_wrapper no-footer">
+                                <table id="patientsSub" class="table display" cellspacing="0" width="100%" role="grid">
+                                    <thead>
+                                        <tr>
+                                            <th>测试号</th>
+                                            <th>CDG结果</th>
+                                            <th>ECG结果</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+				<!--病历显示，布局还带修改-->
+				<div class="col-md-4">
+                    <div class="row" style="height: 400px; overflow-y:auto; overflow-x:hidden;">
+                        <div class="col-md-12" style="border: solid 1px; left:20px">
+                            <div class="header">
+                                <h4 id="Title">病历信息</h4>
+                            </div>
+                            <!--<div id="contentCase"></div>-->
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">姓名：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="caseTitle"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">主诉：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="complaints"></p>
+                                </div>
+                            </div>
+                           <!-- <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">心电图：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="ecgTag"></p>
+                                </div>
+                            </div>-->
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">造影结果：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="reportTag"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">CT结果：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="ctTag"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">医院诊断：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="diagnosisCase"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">民族：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="nationality"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">住址：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="birPlace"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">吸烟：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="smoke"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">饮酒：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="drinkTag"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">家庭史：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="genetic"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">药物史：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="drug"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">心率：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="heartRate"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">射血分数（超声EF）：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="ultrasonic"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">超声舒张末期前后径：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="lv"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">甘油三酯：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="triglyceride"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">血糖：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="bloodSugar"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">肌酐：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="creatinine"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">低密度脂蛋白胆固醇：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="ldlc"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">高密度脂蛋白胆固醇：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="hdlc"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">高敏C反应蛋白：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="hscp"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">脂蛋白a：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="lipoprotein"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">糖化血红蛋白：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="glycated"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">体重指数：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="bmi"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">FFR：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="ffr"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">脑钠肽：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="bnp"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">甲状腺功能：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="thyroid"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">血钾：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="bloodPotassium"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">血纳：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="bloodSodium"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">高血压：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="blood_pressure_high"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="text-danger">低血压：</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <p id="blood_pressure_low"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <!--CDG图-->
+                        <div class="col-md-5" id="CDGContainer">
+                            <div class="header">
+                                <h4 class="CDGTitle" id="myModalLabel1" style="color:#1F1F1F;text-align:center;"></h4>
+                            </div>
+                            <div class="cdgChartContainer" style = "position:relative;">
+                                <div id = "graphCDG" style="width:100%;height:300px;"></div>
+                                <!--<div class="col-md-1" id = "cdgIndex" style="width:300px;height:300px;"></div>-->
+                            </div>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <!--指标图-->
+                        <div class="col-md-5" id="indexContainer">
+                            <div class="header">
+                                <h4 class="CDGTitle" id="myModalLabel2" style="color:#1F1F1F;text-align:center;"></h4>
+                            </div>
+                            <div class="kpiChartContainer" style = "position:relative;">
+                                <div id = "cdgIndex" style="width:100%;height:300px;"></div>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-11" id="ECG1" style="clear:both; height: 1000px; overflow: hidden; left: 5%">
+                            <canvas class="ECGgrid" id="gridCan" style = "width:100%; height:100%;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/scripts.js"></script>
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/input.js"></script>
+    <script src="/js/echarts.min.js"></script>
+	<script src="/js/echarts.js"></script>
+	<script src="/js/echarts-gl.js"></script>
+	
+    <script src="/js/canvas2image.js"></script>
+    <script src="/js/casesSearch.js"></script>
+    <script src="/js/dataTables.bootstrap.min.js"></script>
+    <script src="/js/plotly.min.js"></script>
+    <script src="/js/vis.min.js"></script>
+    <script src="/js/FileSaver.js"></script>
+    <script src="/js/login.js"></script>
+	
+	<script src="/js/canvasjs.min.js"></script>
+	<script src="/js/jquery.canvasjs.min.js"></script>
+</body>
+
+</html>

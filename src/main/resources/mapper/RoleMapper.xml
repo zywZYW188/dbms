@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dbms.dao.RoleMapper">
+    <cache type="com.example.dbms.config.RedisCache" eviction="LRU"/>
+    <resultMap type="com.example.dbms.domain.po.Role" id="Role">
+        <id column="role_id" property="role_id" jdbcType="NUMERIC"/>
+        <id column="role_name" property="role_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="findRoleByUsername" resultMap="Role">
+	select * from role r
+  	left join user_role ur on(r.role_id = ur.role_id)
+	left join users u on(u.id = ur.user_id)
+	where u.username = #{userName}
+    </select>
+
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dbms.dao.NationalityMapper">
+    <cache type="com.example.dbms.config.RedisCache" eviction="LRU"/>
+   <!-- <resultMap type="com.springboot.bean.Na" id="Invitation">
+        <id column="id" property="id" jdbcType="NUMERIC"/>
+        <id column="code" property="code"  jdbcType="VARCHAR"/>
+    </resultMap>-->
+    <select id="findNationalityId" resultType="int">
+	select id from nationality where nationality = #{nationality}
+    </select>
+
+    <select id="findNationality"  resultType="String">
+        select nationality from nationality where id = #{id}
+    </select>
+
+</mapper>

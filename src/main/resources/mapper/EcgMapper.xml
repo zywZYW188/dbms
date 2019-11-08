@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dbms.dao.EcgMapper">
+    <cache type="com.example.dbms.config.RedisCache" eviction="LRU"/>
+    <resultMap type="com.example.dbms.domain.po.Ecg" id="Ecg">
+        <id column="id" property="id" jdbcType="NUMERIC"/>
+        <id column="patient_id" property="patient_id" jdbcType="NUMERIC"/>
+        <id column="test_id" property="test_id"  jdbcType="VARCHAR"/>
+        <id column="ecg_data" property="ecg_data"  jdbcType="VARCHAR"/>
+        <id column="ecg_result" property="ecg_result"  jdbcType="NUMERIC"/>
+        <id column="ecg_info" property="ecg_info"  jdbcType="VARCHAR"/>
+        <id column="surgery" property="surgery"  jdbcType="NUMERIC"/>
+        <id column="date" property="date"  jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="findECGData" resultType="String">
+	select  ecg_data from ecg where id = (select id from ecg where test_id = #{test_id})
+    </select>
+    <select id="findId" resultType="int">
+    select id from ecg where test_id = #{test_id} and patient_id=#{patient_id}
+     </select>
+    <select id="findTest_id"  resultType="java.lang.String">
+      select test_id from ecg where patient_id = #{patient_id}
+    </select>
+    <update id="updateEcg">
+       update ecg set ecg_data = #{ecg_data}, ecg_result = #{ecg_result}, ecg_info = #{ecg_info}, surgery = #{surgery}
+			where id = #{id}
+    </update>
+    <insert id="insertEcg">
+        insert into ecg (patient_id, test_id,  ecg_data, ecg_result, ecg_info, surgery, date) values
+			(#{patient_id}, #{test_id},  #{ecg_data}, #{ecg_result},#{ecg_info}, #{surgery}, #{date})
+    </insert>
+</mapper>

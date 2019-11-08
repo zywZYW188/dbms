@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dbms.dao.ImagingReportMapper">
+    <cache type="com.example.dbms.config.RedisCache" eviction="LRU"/>
+    <resultMap type="com.example.dbms.domain.po.ImagingReport" id="ImagingReport">
+        <id column="id" property="id" jdbcType="NUMERIC"/>
+        <id column="patient_id" property="patient_id" jdbcType="NUMERIC"/>
+        <id column="description" property="description" jdbcType="VARCHAR"/>
+        <id column="result_id" property="result_id"  jdbcType="NUMERIC"/>
+        <id column="date" property="date"  jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insertImagingReport">
+    insert into imaging_report (patient_id,description,result_id,date) values (#{patient_id}, #{description}, #{result_id},#{date})
+    </insert>
+
+    <select id="findById" resultMap="ImagingReport">
+       select * from imaging_report where patient_id = #{patient_id}
+    </select>
+
+    <update id="updateImagingReport">
+      update imaging_report set description = #{imagingReport.description}, result_id = #{imagingReport.result_id}, date = #{imagingReport.date}
+            where patient_id = #{patient_id}
+    </update>
+</mapper>

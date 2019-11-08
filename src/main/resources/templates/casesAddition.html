@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>病历添加-心肌缺血辅助诊断平台</title>
+    <meta name="description" content="Source code generated using layoutit.com"/>
+    <meta name="author" content="LayoutIt!"/>
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/favicon.ico}" />
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/main.css}" rel="stylesheet" />
+    <link th:href="@{/css/cases.css}" rel="stylesheet" />
+    <link th:href="@{/css/amazeui.datetimepicker.css}" rel="stylesheet" />
+    <link th:href="@{/images/favicon.ico}" rel="icon" />
+</head>
+
+<body>
+<div class="row">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/loginIndex">首页</a>
+            </div>
+            <div class="navbar-collapse collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            <span>病历操作</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a shiro:hasPermission="permission:query" th:href="@{/casesSearch}">病历查询</a>
+                                <!--<a href="/casesSearch">病历查询</a>-->
+                            </li>
+                            <li>
+                                <a shiro:hasPermission="permission:add" th:href="@{/casesAddition}">添加病历</a>
+                                <!-- <a href="casesAddition.html">添加病历</a>-->
+                            <li>
+                            <li>
+                                <a shiro:hasPermission="permission:modify" th:href="@{/casesModification}">修改病历</a>
+                                <!--<a href="casesModification.html">修改病历</a>-->
+                            </li>
+                           <!-- <li>
+                                <a shiro:hasPermission="permission:upload" th:href="@{/casesUpdata}">上传病历</a>
+                                &lt;!&ndash;<a href="casesUpdata.html">上传病历</a>&ndash;&gt;
+                            </li>-->
+                            <li>
+                                <a shiro:hasPermission="permission:CDGdiagnosis" th:href="@{/cdgDiagnosis}">有病历诊断</a>
+                                <!--<a href="cdgDiagnosis.html">有病历诊断</a>-->
+                            </li>
+                            <li>
+                                <a shiro:hasPermission="permission:diagnosis" th:href="@{/cdgDiagnosis}">无病历诊断</a>
+                                <!--<a href="cdgDiagnosis.html">无病历诊断</a>-->
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="auth">
+                        <a class="user__name" data-th-utext="${user.username}"></a>
+                    </li>
+                    <li class="auth">
+                        <a role="button" id="logoutbtn">注销登陆</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="jumbotron masthead">
+        <div class="container">
+            <h1>&nbsp;添加病历</h1>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-8">
+            <div class="col-md-2">
+                <!--<div class="list-group">
+                    <a href="casesAddition.html" class="list-group-item active">
+                        添加病历
+                    </a>
+                    <a href="casesModification.html" class="list-group-item">
+                        修改病历
+                    </a>
+                    <a href="casesUpdata.html" class="list-group-item">
+                        病历上传
+                    </a>
+                </div>-->
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+                    <form class="form-group bs-form">
+                        <fieldset>
+                            <legend class="text-danger">添加病历</legend>
+                            <div class="row">
+                                <div class="col-md-9"></div>
+                                <div class="col-md-3">
+                                    <button id="add" type="button" class="btn btn-block btn-primary" style='font-size:20px'>
+                                        添加
+                                    </button>
+                                    <button id="reset" type="button" class="btn btn-block btn-default   " style="font-size:20px">重置</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>病人类型</label>
+                                    <select id="disease" class="form-control" required="required">
+                                        <option value="0">心肌缺血</option>
+                                        <option value="1">心律失常</option>
+                                    </select>
+                                </div>
+                                <div class = 'col-md-3'>
+                                    <label>住院号</label>
+                                    <input type="text" placeholder="六/七位数字" id="admissionnumber" class="form-control" maxlength="7"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>姓名</label>
+                                    <input type="text" placeholder="张三" id="name" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>年龄</label>
+                                    <input type="number" id="age" class="form-control"/>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>性别</label>
+                                    <select id="sex" class="form-control">
+                                        <option value="男">男</option>
+                                        <option value="女">女</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>民族</label>
+                                    <input type="text" id="nationality" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>
+                                        入院时间
+                                    </label>
+                                    <input type="date" id="hosTime" class="form-control time"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>
+                                        出院时间
+                                    </label>
+                                    <input type="date" id="dischargedTime" class="form-control time"/>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class = 'col-md-3'>
+                                    <label>身高/cm</label>
+                                    <input type="number" placeholder="160" id="height" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>体重/kg</label>
+                                    <input type="number" placeholder="60" id="weight" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>吸烟等级</label>
+                                    <select id="smoke_level" class="form-control" required="required"/>
+                                        <option value="0">不吸烟</option>
+                                        <option value="1">偶尔吸烟</option>
+                                        <option value="2">经常吸烟</option>
+                                        <option value="3">沉迷于吸烟</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>饮酒等级</label>
+                                    <select id="drink_level" class="form-control" required="required">
+                                        <option value="0">不饮酒</option>
+                                        <option value="1">偶尔饮酒</option>
+                                        <option value="2">经常饮酒</option>
+                                        <option value="3">沉迷于饮酒</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>住址</label>
+                                    <input type="text" placeholder="省市"id="bir_place" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>药物史</label>
+                                    <input type="text" id="drug_history" class="form-control"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>家庭病史</label>
+                                    <input type="text" id="genetic_history" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>高血压/mmHg</label>
+                                    <input type="number" id="high_blood_pressure" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>低血压/mmHg</label>
+                                    <input type="number" id="low_blood_pressure" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>心率（次/分）</label>
+                                    <input type="number" id="heart_rate" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>脂蛋白mol/L</label>
+                                    <input type="number" id="lipoprotein_a" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>血红蛋白g/L</label>
+                                    <input type="number" id="glycated_hemoglobin" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>射血分数/%</label>
+                                    <input type="number" id="ultrasonicEF" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>FFR</label>
+                                    <input type="number" id="FFR" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>血钾mmol/L</label>
+                                    <input type="number" id="Blood_potassium" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>甘油三酯mmol/L</label>
+                                    <input type="number" id="triglyceride" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>低密度脂蛋白胆固醇</label>
+                                    <input type="number" id="low_density_lipoprotein_cholesterol" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>高密度脂蛋白胆固醇</label>
+                                    <input type="number" id="high_density_lipoprotein_cholesterol" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>高敏C反应蛋白mg/L</label>
+                                    <input type="number" id="High_sensitivity_C_reactive_protein" class="form-control"/>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>超声舒张末期前后径</label>
+                                    <input type="number" id="LV" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>体重指数mol/L</label>
+                                    <input type="number" id="BMI" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>脑钠肽mol/L</label>
+                                    <input type="number" id="bnp" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>血糖mol/L</label>
+                                    <input type="number" id="blood_sugur" class="form-control"/>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>甲状腺功能</label>
+                                    <input type="number" id="thyroid_function" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>血钠mmol/L</label>
+                                    <input type="number" id="Blood_sodium" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>肌酐nmol/L</label>
+                                    <input type="number" id="Creatinine" class="form-control"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>所属医院</label>
+                                    <select id="owner" class="form-control" required="required"/>
+                                        <option value="0">石河子医院</option>
+                                        <option value="1">北京阜外医院</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>
+                                        主诉
+                                    </label>
+                                    <textarea id="complaint" class="form-control"></textarea>
+                                </div>
+                            </div>
+                           <!-- <div class="row">
+                                <div class="col-md-3">
+                                    <label>
+                                        心电图
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                <label class="radio-inline">
+                                    <input type="checkbox" id="surgerybefore" name="ecgRadios">手术前
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="checkbox" id="surgeryafter" name="ecgRadios">手术后
+                                </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input type="text" id="ecgId" class="form-control" placeholder="请输入测试号">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="radio-inline">
+                                        <input type="radio" id="ecgNormal" name="ecgRadios"> 正常
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" id="ecgUnusual" name="ecgRadios"> 可见异常
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" id="ecgBigUnusual" name="ecgRadios"> 明显异常
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <span>心电时间</span>
+                                    <input type="date" id="ecgDate" class="form-control time" style="width: 165px; float: right;">
+                                </div>
+                                <div class="col-md-3">
+                                    &lt;!&ndash;<input type="button" id="ecgAdd" value="添加ECG">&ndash;&gt;
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <textarea id="ecg" class="form-control"></textarea>
+                                </div>
+                            </div>-->
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>
+                                        造影结果
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="radio-inline">
+                                        <input type="radio" id="radiographyNothing" name="radiographyRadios"/> 暂缺
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" id="radiographyNormal" name="radiographyRadios"/> 未见异常
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" id="radiographyStricture" name="radiographyRadios"/> 狭窄
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <span>造影时间</span>
+                                    <input type="date" id="radiographyDate" class="form-control time" style="width: 165px; float: right;">
+                                </div>
+                                <div class="col-md-3">
+                                    <!--<input type="button" id="radiographyAdd" value="添加造影">-->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <textarea id="radiography" class="form-control"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>
+                                        CT结果
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="radio-inline">
+                                        <input type="radio" id="ctNothing" name="ctRadios"/> 暂缺
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" id="ctNormal" name="ctRadios"/> 未见异常
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" id="ctStricture" name="ctRadios"/> 狭窄
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <span>CT时间</span>
+                                    <input type="date" id="CTDate" class="form-control time" style="width: 165px; float: right;"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <!--<input type="button" id="CTAdd" value="添加CT">-->
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <textarea id="ct" class="form-control"></textarea>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>
+                                        入院初次诊断
+                                    </label>
+                                </div>
+                                <div class="col-md-5"></div>
+                                <div class="col-md-3">
+                                    <!--<input type="button" id="diagnosisAdd" value="添加入院诊断">-->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <textarea id="diagnosis" class="form-control"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>
+                                        备注
+                                    </label>
+                                    <textarea id="remarks" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    </div>
+</div>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/amazeui.datetimepicker.min.js"></script>
+<script src="/js/casesAddition.js"></script>
+<script src="/js/login.js"></script>
+</body>
+
+</html>

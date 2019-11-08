@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dbms.dao.BasicCaseMapper">
+    <cache type="com.example.dbms.config.RedisCache" eviction="LRU"/>
+    <resultMap type="com.example.dbms.domain.po.Basiccase" id="Basiccase">
+        <id column="id" property="id" jdbcType="NUMERIC"/>
+        <id column="patient_id" property="patient_id" jdbcType="NUMERIC"/>
+        <id column="height" property="height" jdbcType="NUMERIC"/>
+        <id column="weight" property="weight"  jdbcType="NUMERIC"/>
+        <id column="smoke_level" property="smoke_level"  jdbcType="NUMERIC"/>
+        <id column="drink_level" property="drink_level"  jdbcType="NUMERIC"/>
+        <id column="genetic_history" property="genetic_history"  jdbcType="VARCHAR"/>
+        <id column="drug_history" property="drug_history"  jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insertBasicCase">
+    insert into basic_case(patient_id, height, weight, smoke_level, drink_level, genetic_history,drug_history) values (#{patient_id}, #{height},
+            #{weight}, #{smoke_level}, #{drink_level}, #{genetic_history}, #{drug_history})
+    </insert>
+    <select id="findById" resultMap="Basiccase">
+        select * from basic_case where patient_id= #{patient_id}
+    </select>
+
+    <update id="updateBasiccase" parameterType="com.example.dbms.domain.po.Basiccase">
+        update basic_case set height = #{basiccase.height}, weight = #{basiccase.weight}, smoke_level = #{basiccase.smoke_level},
+            drink_level = #{basiccase.drink_level}, genetic_history = #{basiccase.genetic_history}, drug_history = #{basiccase.drug_history}
+            where patient_id = #{patient_id}
+    </update>
+</mapper>
